@@ -9,6 +9,7 @@ import {
    NotFoundErrorSchema
 } from '../../../../../lib/openApiSchemas';
 import { PortSchema } from '../lib/schemas';
+import { assetExists } from '../lib/helpers';
 
 export default new OpenAPIHono().openapi(
    createRoute({
@@ -38,13 +39,7 @@ export default new OpenAPIHono().openapi(
       try {
          const { id } = c.req.valid('param');
 
-         const asset = await prisma.assets.findUnique({
-            where: {
-               id
-            }
-         });
-
-         if (!asset) {
+         if (!(await assetExists(id))) {
             return notFoundError(c, `Asset with id: ${id}, could not be found`);
          }
 
