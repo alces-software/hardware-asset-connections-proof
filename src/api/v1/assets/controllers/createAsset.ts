@@ -1,0 +1,82 @@
+import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
+
+import { prisma } from '../../../../lib/prisma';
+import { internalServerError } from '../../../../lib/errorMessages';
+import { assetInclude } from '../lib/includeSerializers';
+import { serializeAsset } from '../lib/outputSerializers';
+import { InternalServerErrorSchema } from '../../../../lib/openApiSchemas';
+import { AssetReturnSchema } from '../lib/schemas';
+
+export default new OpenAPIHono().openapi(
+   createRoute({
+      method: 'post',
+      path: '/',
+      description: 'Creates a new asset',
+      tags: ['Assets'],
+      request: {
+         body: {
+            content: {
+               'application/json': {
+                  schema: z.object({
+                     name: z
+                        .string({ error: 'Name must be a string' })
+                        .min(1, { error: 'Name cannot be empty' }),
+                     notes: z.string({ error: 'Notes must be a string' }).nullable().optional(),
+                     uSize: z
+                        .number({ error: 'uSize must be a number' })
+                        .int({ error: 'uSize must be an integer' })
+                        .default(1),
+                     uTop: z
+                        .number({ error: 'uTop must be a number' })
+                        .int({ error: 'uTop must be an integer' })
+                        .default(0),
+                     uBottom: z
+                        .number({ error: 'uBottom must be a number' })
+                        .int({ error: 'uBottom must be an integer' })
+                        .default(0),
+                     ports: z.array(
+                        z
+                           .number('portTypeId must be a number')
+                           .int('portTypeId must be an integer')
+                           .positive('portTypeId must be positive')
+                     )
+                  })
+               }
+            }
+         }
+      },
+      responses: {
+         201: {
+            description: 'Asset created',
+            content: {
+               'application/json': {
+                  schema: AssetReturnSchema
+               }
+            }
+         },
+         ...InternalServerErrorSchema
+      }
+   }),
+   async (c) => {
+      try {
+         // Get request information
+         const body = c.req.valid('json');
+
+         // Create asset in the database
+         const asset = await prisma.assets.create({
+            data: {
+               name: body.name,
+               notes: body.notes,
+               uSize: body.uSize,
+               uTop: body.uTop,
+               uBottom: body.uBottom
+            },
+            ...assetInclude
+         });
+
+         return c.json(serializeAsset(asset), 201);
+      } catch (err) {
+         return internalServerError(c, err);
+      }
+   }
+);

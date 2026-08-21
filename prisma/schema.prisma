@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Assets {
+  id      Int     @id @default(autoincrement())
+  name    String  @db.VarChar(255)
+  notes   String? @db.Text
+  uTop    Int     @default(0)
+  uBottom Int     @default(0)
+  uSize   Int     @default(1)
+  Ports   Ports[]
+}
+
+model PortTypes {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(255)
+  Ports Ports[]
+}
+
+model Ports {
+  id                                             Int               @id @default(autoincrement())
+  assetId                                        Int
+  portIndex                                      Int
+  portTypeId                                     Int
+  PortConnections_PortConnections_PortAIdToPorts PortConnections[] @relation("PortConnections_PortAIdToPorts")
+  PortConnections_PortConnections_PortBIdToPorts PortConnections[] @relation("PortConnections_PortBIdToPorts")
+  Assets                                         Assets            @relation(fields: [assetId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_ports_assets")
+  PortTypes                                      PortTypes         @relation(fields: [portTypeId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_ports_porttype")
+
+  @@unique([assetId, portIndex], map: "uq_assetid_index")
+  @@index([portTypeId], map: "fk_ports_porttype")
+}
+
+model PortConnections {
+  id                                   Int   @id @default(autoincrement())
+  PortAId                              Int
+  PortBId                              Int
+  Ports_PortConnections_PortAIdToPorts Ports @relation("PortConnections_PortAIdToPorts", fields: [PortAId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_porta_ports")
+  Ports_PortConnections_PortBIdToPorts Ports @relation("PortConnections_PortBIdToPorts", fields: [PortBId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_portb_ports")
+
+  @@unique([PortAId, PortBId], map: "uq_portconnection")
+  @@index([PortBId], map: "fk_portb_ports")
+}
