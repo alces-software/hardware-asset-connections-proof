@@ -5,7 +5,7 @@ import { internalServerError } from '../../../../lib/errorMessages';
 import { assetInclude } from '../lib/includeSerializers';
 import { serializeAsset } from '../lib/outputSerializers';
 import { InternalServerErrorSchema } from '../../../../lib/openApiSchemas';
-import { AssetReturnSchema } from '../lib/schemas';
+import { AssetSchema } from '../lib/schemas';
 
 export default new OpenAPIHono().openapi(
    createRoute({
@@ -18,7 +18,7 @@ export default new OpenAPIHono().openapi(
             description: 'Assets retrieved',
             content: {
                'application/json': {
-                  schema: z.array(AssetReturnSchema)
+                  schema: z.array(AssetSchema)
                }
             }
          },

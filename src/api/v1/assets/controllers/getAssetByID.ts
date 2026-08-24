@@ -9,7 +9,7 @@ import {
    InternalServerErrorSchema,
    NotFoundErrorSchema
 } from '../../../../lib/openApiSchemas';
-import { AssetReturnSchema } from '../lib/schemas';
+import { AssetSchema } from '../lib/schemas';
 
 export default new OpenAPIHono().openapi(
    createRoute({
@@ -27,7 +27,7 @@ export default new OpenAPIHono().openapi(
             description: 'Asset retrieved',
             content: {
                'application/json': {
-                  schema: AssetReturnSchema
+                  schema: AssetSchema
                }
             }
          },
