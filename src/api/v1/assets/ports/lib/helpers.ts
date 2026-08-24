@@ -20,6 +20,16 @@ export async function isValidPortType(id: number) {
    return Boolean(portType);
 }
 
+export async function getPort(id: number) {
+   const port = await prisma.ports.findUnique({
+      where: {
+         id
+      },
+      ...portInclude
+   });
+   return port;
+}
+
 export const createPort = async (assetId: number, portTypeId: number) => {
    for (let attempt = 0; attempt < 3; attempt++) {
       try {
