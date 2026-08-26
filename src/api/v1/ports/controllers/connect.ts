@@ -85,29 +85,28 @@ export default new OpenAPIHono().openapi(
             return existingResourceError(c, 'Both ports already have connections');
          }
 
-         if (
-            // For both ports, check if they have just one connection, and then check if the port it's connected to has a connection
-            await !serializedPorts.every(async (port) => {
-               if (port.connectedPorts.length != 1) {
-                  return true;
-               }
-               const connectedPort = await prisma.ports.findUnique({
-                  where: {
-                     id: port.connectedPorts[0].id
-                  },
-                  ...portInclude
-               });
+         // For both ports, check if they have just one connection, and then check if the port it's connected to has a connection
+         for (const port of serializedPorts) {
+            if (port.connectedPorts.length !== 1) {
+               continue;
+            }
 
-               if (!connectedPort) {
-                  throw new Error("I don't know how you managed this");
-               }
+            const connectedPort = await prisma.ports.findUnique({
+               where: {
+                  id: port.connectedPorts[0].id
+               },
+               ...portInclude
+            });
 
-               const connectedPortPorts = combineConnections(connectedPort);
+            if (!connectedPort) {
+               throw new Error("I don't know how you managed this");
+            }
 
-               return connectedPortPorts.length > 1;
-            })
-         ) {
-            return existingResourceError(c, 'This would create a daisy chain');
+            const connectedPortPorts = combineConnections(connectedPort);
+
+            if (connectedPortPorts.length <= 1) {
+               return existingResourceError(c, 'This would create a daisy chain');
+            }
          }
 
          const connection = await prisma.portConnections.create({
