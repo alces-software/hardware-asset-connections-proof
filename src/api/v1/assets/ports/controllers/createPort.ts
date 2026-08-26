@@ -1,7 +1,7 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 
 import { internalServerError, notFoundError } from '../../../../../lib/errorMessages';
-import { serializePort } from '../lib/outputSerializers';
+import { serializePort } from '../lib/serializers';
 import {
    createIdParam,
    InternalServerErrorSchema,

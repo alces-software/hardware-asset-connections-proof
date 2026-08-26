@@ -2,8 +2,8 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 
 import { prisma } from '../../../../lib/prisma';
 import { internalServerError } from '../../../../lib/errorMessages';
-import { assetInclude } from '../lib/includeSerializers';
-import { serializeAsset } from '../lib/outputSerializers';
+import { assetInclude } from '../lib/includes';
+import { serializeAsset } from '../lib/serializers';
 import { InternalServerErrorSchema } from '../../../../lib/openApiSchemas';
 import { AssetSchema } from '../lib/schemas';
 

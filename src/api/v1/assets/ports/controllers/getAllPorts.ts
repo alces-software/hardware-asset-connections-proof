@@ -1,8 +1,8 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 import { prisma } from '../../../../../lib/prisma';
 import { internalServerError, notFoundError } from '../../../../../lib/errorMessages';
-import { portInclude } from '../lib/includeSerializers';
-import { serializePort } from '../lib/outputSerializers';
+import { portInclude } from '../lib/includes';
+import { serializePort } from '../lib/serializers';
 import {
    createIdParam,
    InternalServerErrorSchema,

@@ -1,15 +1,9 @@
 import { Prisma } from '@prisma/client';
-import { portInclude } from './includeSerializers';
+import { portInclude } from '../../../lib/includes';
+import { combineConnections } from '../../../lib/serializers';
 
 export function serializePort(port: Prisma.PortsGetPayload<typeof portInclude>) {
-   const connectedPorts = [
-      ...port.PortConnections_PortConnections_PortAIdToPorts.map(
-         (connection) => connection.Ports_PortConnections_PortBIdToPorts
-      ),
-      ...port.PortConnections_PortConnections_PortBIdToPorts.map(
-         (connection) => connection.Ports_PortConnections_PortAIdToPorts
-      )
-   ];
+   const connectedPorts = combineConnections(port);
 
    return {
       id: port.id,

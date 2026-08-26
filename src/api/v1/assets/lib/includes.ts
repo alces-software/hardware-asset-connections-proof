@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { portInclude } from '../ports/lib/includeSerializers';
+import { portInclude } from '../../lib/includes';
 
 export const assetInclude = Prisma.validator<Prisma.AssetsDefaultArgs>()({
    include: {

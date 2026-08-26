@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../../../../lib/prisma';
-import { portInclude } from './includeSerializers';
+import { portInclude } from '../../../lib/includes';
 
 export async function assetExists(id: number) {
    const asset = await prisma.assets.findUnique({

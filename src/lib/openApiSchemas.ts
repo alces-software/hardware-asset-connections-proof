@@ -40,7 +40,7 @@ export const NotFoundErrorSchema = {
  */
 export const ConflictErrorSchema = {
    409: {
-      description: 'Domain already exists',
+      description: 'Resource already exists',
       content: {
          'application/json': {
             schema: z.object({
