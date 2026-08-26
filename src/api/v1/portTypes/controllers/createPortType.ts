@@ -43,7 +43,7 @@ export default new OpenAPIHono().openapi(
       try {
          const body = c.req.valid('json');
 
-         const existingName = await prisma.assets.findFirst({
+         const existingName = await prisma.portTypes.findFirst({
             where: {
                name: body.name
             }
@@ -56,7 +56,7 @@ export default new OpenAPIHono().openapi(
             );
          }
 
-         const portType = await prisma.assets.create({
+         const portType = await prisma.portTypes.create({
             data: {
                name: body.name
             },
