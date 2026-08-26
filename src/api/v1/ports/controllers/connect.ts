@@ -104,7 +104,7 @@ export default new OpenAPIHono().openapi(
 
             const connectedPortPorts = combineConnections(connectedPort);
 
-            if (connectedPortPorts.length <= 1) {
+            if (connectedPortPorts.length > 1) {
                return existingResourceError(c, 'This would create a daisy chain');
             }
          }
