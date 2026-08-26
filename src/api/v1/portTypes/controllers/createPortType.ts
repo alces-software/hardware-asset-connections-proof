@@ -43,7 +43,7 @@ export default new OpenAPIHono().openapi(
       try {
          const body = c.req.valid('json');
 
-         const existingName = await prisma.assets.findMany({
+         const existingName = await prisma.assets.findFirst({
             where: {
                name: body.name
             }
@@ -52,7 +52,7 @@ export default new OpenAPIHono().openapi(
          if (existingName) {
             return existingResourceError(
                c,
-               `An asset type called: ${body.name} already exists in the database`
+               `A port type called: ${body.name} already exists in the database`
             );
          }
 
