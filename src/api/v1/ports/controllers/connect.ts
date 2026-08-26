@@ -87,7 +87,7 @@ export default new OpenAPIHono().openapi(
 
          if (
             // For both ports, check if they have just one connection, and then check if the port it's connected to has a connection
-            !serializedPorts.every(async (port) => {
+            await !serializedPorts.every(async (port) => {
                if (port.connectedPorts.length != 1) {
                   return true;
                }
