@@ -2,21 +2,21 @@ import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi';
 
 import { prisma } from '../../../../lib/prisma';
 import { internalServerError, notFoundError } from '../../../../lib/errorMessages';
-import { assetInclude } from '../lib/includes';
-import { serializeAsset } from '../lib/serializers';
 import {
    createIdParam,
    InternalServerErrorSchema,
    NotFoundErrorSchema
 } from '../../../../lib/openApiSchemas';
-import { AssetSchema } from '../lib/schemas';
+import { PortTypeSchema } from '../lib/schemas';
+import { portTypeInclude } from '../lib/includes';
+import { serializePortType } from '../lib/serializers';
 
 export default new OpenAPIHono().openapi(
    createRoute({
       method: 'get',
       path: '/',
-      description: 'Retrieves an asset using its ID',
-      tags: ['Assets'],
+      description: 'Retrieves a port type using its ID',
+      tags: ['Port Types'],
       request: {
          params: z.object({
             ...createIdParam('id')
@@ -24,10 +24,10 @@ export default new OpenAPIHono().openapi(
       },
       responses: {
          200: {
-            description: 'Asset retrieved',
+            description: 'Port type retrieved',
             content: {
                'application/json': {
-                  schema: AssetSchema
+                  schema: PortTypeSchema
                }
             }
          },
@@ -37,23 +37,20 @@ export default new OpenAPIHono().openapi(
    }),
    async (c) => {
       try {
-         // Get request information
          const { id } = c.req.valid('param');
 
-         // Try and get the asset from the database
-         const asset = await prisma.assets.findUnique({
+         const portType = await prisma.portTypes.findUnique({
             where: {
                id
             },
-            ...assetInclude
+            ...portTypeInclude
          });
 
-         // Check the asset exists
-         if (!asset) {
-            return notFoundError(c, `Asset with id: ${id} could not be found.`);
+         if (!portType) {
+            return notFoundError(c, `Port type with id: ${id} could not be found.`);
          }
 
-         return c.json(serializeAsset(asset), 200);
+         return c.json(serializePortType(portType), 200);
       } catch (err) {
          return internalServerError(c, err);
       }
