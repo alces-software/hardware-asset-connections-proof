@@ -33,13 +33,7 @@ export default new OpenAPIHono().openapi(
                      uBottom: z
                         .number({ error: 'uBottom must be a number' })
                         .int({ error: 'uBottom must be an integer' })
-                        .default(0),
-                     ports: z.array(
-                        z
-                           .number('portTypeId must be a number')
-                           .int('portTypeId must be an integer')
-                           .positive('portTypeId must be positive')
-                     )
+                        .default(0)
                   })
                }
             }
