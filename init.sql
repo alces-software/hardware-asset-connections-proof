@@ -73,10 +73,32 @@ VALUES (
 -- -----------------------------------------------------------
 -- Port Types
 -- -----------------------------------------------------------
-INSERT INTO PortTypes (name)
-VALUES ('Ethernet'),
-   ('SFP'),
-   ('Fiber');
+INSERT INTO PortTypes (id, name)
+VALUES (1, 'Ethernet'),
+   (2, 'SFP'),
+   (3, 'Fiber'),
+   (4, 'SFP+'),
+   (5, 'SFP28'),
+   (6, 'SFP56'),
+   (7, 'QSFP'),
+   (8, 'QSFP+'),
+   (9, 'QSFP28'),
+   (10, 'QSFP56'),
+   (11, 'QSFP-DD'),
+   (12, 'OSFP'),
+   (13, 'InfiniBand'),
+   (14, 'USB-A'),
+   (15, 'USB-C'),
+   (16, 'VGA'),
+   (17, 'HDMI'),
+   (18, 'DisplayPort'),
+   (19, 'DB-9'),
+   (20, 'Console port'),
+   (21, 'IEC C13 power'),
+   (22, 'IEC C14 power'),
+   (23, 'IEC C19 power'),
+   (24, 'IEC C20 power'),
+   (25, 'MPO');
 -- -----------------------------------------------------------
 -- Ports
 --
